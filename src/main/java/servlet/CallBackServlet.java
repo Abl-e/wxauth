@@ -52,8 +52,8 @@ public class CallBackServlet extends HttpServlet {
             req.getRequestDispatcher("/success.jsp").forward(req,resp);
         }else{
             //未绑定
-            userInfo.getString("nickName");
             req.setAttribute("openid",openid);
+            req.setAttribute("nickname",userInfo.getString("nickname"));
             req.getRequestDispatcher("/login.jsp").forward(req,resp);
         }
 
