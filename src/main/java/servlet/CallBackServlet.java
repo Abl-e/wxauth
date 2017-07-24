@@ -106,8 +106,8 @@ public class CallBackServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String account = req.getParameter("account");
-        String password = req.getParameter("password");
+        String account = req.getParameter("account").trim();
+        String password = req.getParameter("password").trim();
         String openid = req.getParameter("openid");
         String nickname = req.getParameter("nickname");
         int count = this.updateUser(openid,nickname,account, password);
