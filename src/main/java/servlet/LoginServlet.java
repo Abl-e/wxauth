@@ -17,9 +17,9 @@ import java.net.URLEncoder;
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String backUrl = "http://1765qy5849.iask.in:19104/callBack";
+        String backUrl = "http://3e1f35c9.ngrok.io/callBack";
         String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + AuthUtil.APPID+
-                "&redirect_uri=" + URLEncoder.encode(backUrl)+
+                "&redirect_uri=" + URLEncoder.encode(backUrl,"UTF-8")+
                 "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
         resp.sendRedirect(url);
     }

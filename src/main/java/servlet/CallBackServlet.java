@@ -1,8 +1,8 @@
 package servlet;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import util.AuthUtil;
+import util.DBUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,12 +10,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Created by 唐国翔 on 2017/7/20 0020.
  */
 @WebServlet(name = "callBackServlet",urlPatterns = "/callBack")
 public class CallBackServlet extends HttpServlet {
+
+    private Connection connection;
+    private PreparedStatement preparedStatement;
+    private ResultSet resultSet;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String code = req.getParameter("code");
@@ -36,6 +45,29 @@ public class CallBackServlet extends HttpServlet {
         System.out.println(userInfo);
         req.setAttribute("userInfo",userInfo);
         req.getRequestDispatcher("/user.jsp").forward(req,resp);
+    }
 
+
+    public String getNickName(String openid){
+        String nickName = "";
+        String sql = "select nickname from user where openid=?";
+        try {
+            connection = DBUtil.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,openid);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                nickName = resultSet.getString("nickname");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            DBUtil.closeAll(connection,preparedStatement,resultSet);
+        }
+        return nickName;
     }
 }
